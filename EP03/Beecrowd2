@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_AMIGOS 100 // define o máximo de amigos que Luiggy pode ter
+
+int main() {
+    char amigos_atuais[MAX_AMIGOS][20], amigos_novos[MAX_AMIGOS][20], amigo_indicacao[20];
+    int n_amigos_atuais = 0, n_amigos_novos = 0, pos_amigo_indicacao = -1;
+
+    // Lê a lista de amigos atuais
+    printf("Digite a lista de amigos atuais de Luiggy (nomes separados por espaço): ");
+    char c;
+    do {
+        scanf("%s", amigos_atuais[n_amigos_atuais]);
+        n_amigos_atuais++;
+        c = getchar();
+    } while (c != '\n' && n_amigos_atuais < MAX_AMIGOS);
+
+    // Lê a lista de amigos novos
+    printf("Digite a lista de amigos novos de Luiggy (nomes separados por espaço): ");
+    do {
+        scanf("%s", amigos_novos[n_amigos_novos]);
+        n_amigos_novos++;
+        c = getchar();
+    } while (c != '\n' && n_amigos_novos < MAX_AMIGOS);
+
+    // Lê o nome do amigo de indicação (ou "nao")
+    printf("Digite o nome do amigo a indicar a nova lista (ou 'nao'): ");
+    scanf("%s", amigo_indicacao);
+
+    // Encontra a posição do amigo de indicação na lista de amigos atuais (se existir)
+    for (int i = 0; i < n_amigos_atuais; i++) {
+        if (strcmp(amigos_atuais[i], amigo_indicacao) == 0) {
+            pos_amigo_indicacao = i;
+            break;
+        }
+    }
+
+    // Insere os novos amigos antes do amigo de indicação (se existir)
+    if (pos_amigo_indicacao >= 0) {
+        for (int i = n_amigos_atuais + n_amigos_novos - 1; i > pos_amigo_indicacao; i--) {
+            strcpy(amigos_atuais[i], amigos_atuais[i-1]);
+        }
+        for (int i = 0; i < n_amigos_novos; i++) {
+            strcpy(amigos_atuais[pos_amigo_indicacao+i], amigos_novos[i]);
+        }
+    }
+    // Insere os novos amigos no final da lista (se não houver amigo de indicação)
+    else {
+        for (int i = 0; i < n_amigos_novos; i++) {
+            strcpy(amigos_atuais[n_amigos_atuais+i], amigos_novos[i]);
+        }
+        n_amigos_atuais += n_amigos_novos;
+    }
+
+    // Imprime a nova lista de amigos
+    printf("Nova lista de amigos de Luiggy: ");
+    for (int i = 0; i < n_amigos_atuais; i++) {
+        printf("%s ", amigos_atuais[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
