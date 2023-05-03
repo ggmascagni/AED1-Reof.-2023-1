@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void selectionSort(int arr[], int n) {
+    int i, j, posicao_min, temp;
+    for (i = 0; i < n - 1; i++) {
+        posicao_min = i;
+        for (j = i + 1; j < n; j++) {
+            if (arr[j] < arr[posicao_min]) {
+                posicao_min = j;
+            }
+        }
+        if (posicao_min != i) {
+            temp = arr[i];
+            arr[i] = arr[posicao_min];
+            arr[posicao_min] = temp;
+        }
+    }
+}
+
+int main() {
+    int n, i;
+    clock_t inicio, fim;
+    double tempo;
+
+    printf("Entre com o tamanho do array: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    // Preenche o array com números aleatórios
+    srand(time(NULL));
+    for (i = 0; i < n; i++) {
+        arr[i] = rand();
+    }
+
+    inicio = clock(); // marca o tempo inicial
+
+    selectionSort(arr, n);
+
+    fim = clock(); // marca o tempo final
+
+    tempo = (double)(fim - inicio) * 1000 / CLOCKS_PER_SEC; // calcula o tempo em milissegundos
+
+    printf("\nO algoritmo de ordenação levou %.2f milissegundos para ser executado.\n", tempo);
+
+    return 0;
+}
