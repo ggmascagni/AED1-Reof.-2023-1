@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_N 100
+#define MAX_NOME 20
+
+typedef struct {
+    char nome[MAX_NOME + 1];
+    int indice;
+} Aluno;
+
+int compara(const void* a, const void* b) {
+    return strcmp(((Aluno*)a)->nome, ((Aluno*)b)->nome);
+}
+
+int main() {
+    int n, k;
+    Aluno alunos[MAX_N];
+
+    scanf("%d %d", &n, &k);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%s", alunos[i].nome);
+        alunos[i].indice = i + 1;
+    }
+
+    qsort(alunos, n, sizeof(Aluno), compara);
+
+    printf("%s\n", alunos[k-1].nome);
+
+    return 0;
+}
