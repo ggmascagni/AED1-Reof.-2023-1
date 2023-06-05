@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+
+struct no {
+    struct no* esq;
+    int chave;
+    struct no* dir;
+};
+typedef struct no ArvoreBinaria;
+
+int traversalType;
+
+ArvoreBinaria* busca(ArvoreBinaria* raiz, int chave)
+{
+    if (raiz == NULL)
+        return NULL;
+    else if (chave <= raiz->chave) {
+        if (raiz->esq == NULL)
+            return raiz;
+        else
+            return busca(raiz->esq, chave);
+    } else {
+        if (raiz->dir == NULL)
+            return raiz;
+        else
+            return busca(raiz->dir, chave);
+    }
+}
+
+int imprime(ArvoreBinaria* raiz)
+{
+    if (raiz != NULL) {
+        if (traversalType == 1) {
+            printf(" %d", raiz->chave);
+            imprime(raiz->esq);
+            imprime(raiz->dir);
+        }
+        if (traversalType == 2) {
+            imprime(raiz->esq);
+            printf(" %d", raiz->chave);
+            imprime(raiz->dir);
+        }
+        if (traversalType == 3) {
+            imprime(raiz->esq);
+            imprime(raiz->dir);
+            printf(" %d", raiz->chave);
+        }
+    }
+
+    return 0;
+}
+
+int main()
+{
+    ArvoreBinaria* raiz;
+    ArvoreBinaria* pai;
+    ArvoreBinaria* aux;
+    int tam, numCasos, c, d, chave;
+
+    raiz = NULL;
+    scanf("%d", &numCasos);
+
+    for (c = 1; c <= numCasos; c++) {
+        raiz = NULL;
+
+        scanf("%d", &tam);
+        for (d = 0; d < tam; d++) {
+            scanf("%d", &chave);
+
+            aux = (ArvoreBinaria*)malloc(sizeof(ArvoreBinaria));
+            aux->chave = chave;
+            aux->esq = NULL;
+            aux->dir = NULL;
+
+            pai = busca(raiz, chave);
+            if (pai == NULL)
+                raiz = aux;
+            else if (chave <= pai->chave)
+                pai->esq = aux;
+            else
+                pai->dir = aux;
+        }
+
+        printf("Case %d:", c);
+
+        printf("\nPre.:");
+        traversalType = 1;
+        imprime(raiz);
+
+        printf("\nIn..:");
+        traversalType = 2;
+        imprime(raiz);
+
+        printf("\nPost:");
+        traversalType = 3;
+        imprime(raiz);
+
+        printf("\n\n");
+    }
+
+    return 0;
+}
