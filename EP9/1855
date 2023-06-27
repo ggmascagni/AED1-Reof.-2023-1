@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+char mapa[MAX][MAX];
+int largura, altura;
+
+void le_mapa() {
+    scanf("%d", &largura);
+    scanf("%d", &altura);
+    for (int i = 0; i < altura; i++) {
+        for (int j = 0; j < largura; j++) {
+            scanf("%c", &mapa[i][j]);
+        }
+        scanf("\n");
+    }
+}
+
+int dfs(int x, int y) {
+    if (x < 0 || x >= largura || y < 0 || y >= altura) {
+        return 0; // fora do mapa
+    }
+    if (mapa[y][x] == '*') {
+        return 1; // achou um baú
+    }
+    if (mapa[y][x] == '.' || mapa[y][x] == 'o') {
+        mapa[y][x] = 'o'; // marca como visitado
+        if (dfs(x+1, y) || dfs(x-1, y) || dfs(x, y+1) || dfs(x, y-1)) {
+            return 1; // achou um caminho para o baú
+        }
+    }
+    return 0; // não achou um caminho para o baú
+}
+
+int main() {
+    le_mapa();
+    int achei_bau = dfs(0, 0);
+    if (achei_bau) {
+        printf("*\n");
+    } else {
+        printf("!\n");
+    }
+    return 0;
+}
