@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_LENGTH 100001
+
+int main() {
+    char input[MAX_LENGTH];
+    fgets(input, sizeof(input), stdin);
+
+    int inputLength = strlen(input);
+    if (input[inputLength - 1] == '\n') {
+        input[inputLength - 1] = '\0';  // Remove a quebra de linha adicionada pelo fgets
+        inputLength--;
+    }
+
+    int i;
+    for (i = 0; i < inputLength - 4; i++) {
+        if (tolower(input[i]) == 'z' && tolower(input[i + 1]) == 'e' && tolower(input[i + 2]) == 'l' &&
+            tolower(input[i + 3]) == 'd' && tolower(input[i + 4]) == 'a') {
+            printf("Link Bolado\n");
+            return 0;
+        }
+    }
+
+    printf("Link Tranquilo\n");
+    return 0;
+}
