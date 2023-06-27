@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+    char value;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+Node* createNode(char value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->value = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+int searchIndex(char arr[], int start, int end, char value) {
+    int i;
+    for (i = start; i <= end; i++) {
+        if (arr[i] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Node* buildTree(char inorder[], char preorder[], int inStart, int inEnd, int* preIndex) {
+    if (inStart > inEnd) {
+        return NULL;
+    }
+
+    Node* newNode = createNode(preorder[*preIndex]);
+    (*preIndex)++;
+
+    if (inStart == inEnd) {
+        return newNode;
+    }
+
+    int inIndex = searchIndex(inorder, inStart, inEnd, newNode->value);
+
+    newNode->left = buildTree(inorder, preorder, inStart, inIndex - 1, preIndex);
+    newNode->right = buildTree(inorder, preorder, inIndex + 1, inEnd, preIndex);
+
+    return newNode;
+}
+
+void postOrderTraversal(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    postOrderTraversal(root->left);
+    postOrderTraversal(root->right);
+    printf("%c", root->value);
+}
+
+int main() {
+    int numCases;
+    scanf("%d", &numCases);
+
+    int i;
+    for (i = 0; i < numCases; i++) {
+        int numNodes;
+        scanf("%d", &numNodes);
+
+        char inorder[53];
+        char preorder[53];
+        scanf("%s", preorder);
+        scanf("%s", inorder);
+
+        int preIndex = 0;
+        Node* root = buildTree(inorder, preorder, 0, numNodes - 1, &preIndex);
+
+        postOrderTraversal(root);
+        printf("\n");
+
+        // Liberar memória
+        free(root);
+    }
+
+    return 0;
+}
