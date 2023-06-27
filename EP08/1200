@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura de um nó da árvore
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+// Função para criar um novo nó
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Função para inserir um elemento na árvore
+Node* insert(Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else if (data > root->data) {
+        root->right = insert(root->right, data);
+    }
+
+    return root;
+}
+
+// Função para percorrer a árvore em ordem infixa
+void inorder(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    inorder(root->left);
+    printf("%d\n", root->data);
+    inorder(root->right);
+}
+
+// Função para percorrer a árvore em ordem prefixa
+void preorder(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    printf("%d\n", root->data);
+    preorder(root->left);
+    preorder(root->right);
+}
+
+// Função para percorrer a árvore em ordem posfixa
+void postorder(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d\n", root->data);
+}
+
+// Função para pesquisar um elemento na árvore
+int search(Node* root, int data) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    if (root->data == data) {
+        return 1;
+    } else if (data < root->data) {
+        return search(root->left, data);
+    } else {
+        return search(root->right, data);
+    }
+}
+
+// Função principal
+int main() {
+    Node* root = NULL;
+    char command[10];
+    int data;
+
+    while (scanf("%s", command) != EOF) {
+        if (command[0] == 'I') {
+            scanf("%d", &data);
+            root = insert(root, data);
+        } else if (strcmp(command, "INFIXA") == 0) {
+            inorder(root);
+        } else if (strcmp(command, "PREFIXA") == 0) {
+            preorder(root);
+        } else if (strcmp(command, "POSFIXA") == 0) {
+            postorder(root);
+        } else if (command[0] == 'P') {
+            scanf("%d", &data);
+            if (search(root, data)) {
+                printf("existe\n");
+            } else {
+                printf("nao existe\n");
+            }
+        }
+    }
+
+    return 0;
+}
